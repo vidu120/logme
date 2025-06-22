@@ -10,9 +10,14 @@ permissions:
 jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: us-docker.pkg.dev/firebase-repo/firebase-hosting/github-actions:latest
+    runs-on: ubuntu-latest
+    name: Build and Deploy to Firebase Hosting Preview Channel
     steps:
       - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
       - run: flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
