@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
-      home: const MyHomePage(title: 'LogMe Page'),
+      home: const MyHomePage(title: 'Logme Incremental Release Demo'),
     );
   }
 }
