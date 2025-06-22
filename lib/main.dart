@@ -1,67 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:logme/core/themes/app_theme.dart';
+import 'package:logme/widgets/top_bar.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-      ),
-      home: const MyHomePage(title: 'Logme Incremental Release Demo'),
-    );
-  }
+  MyAppState createState() => MyAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyAppState extends State<MyApp> {
+  bool isDarkMode = false;
+  bool isSignedIn = false;
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
+  void _toggleTheme(bool value) {
     setState(() {
-      _counter++;
+      isDarkMode = value;
+    });
+  }
+
+  void _toggleSignIn(bool value) {
+    setState(() {
+      isSignedIn = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Logme Demo',
+      theme: isDarkMode ? AppTheme.dark : AppTheme.light,
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: (settings) {
+        final route = AppRoutes.generateRoute(settings);
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: TopBar(
+              isDarkMode: isDarkMode,
+              onThemeToggle: _toggleTheme,
+              onSignInToggle: _toggleSignIn,
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+            body: route(context),
+          ),
+        );
+      },
     );
   }
 }
