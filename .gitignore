@@ -45,7 +45,6 @@ app.*.map.json
 /android/app/release
 
 # Firebase related
-firebase.json
 .firebaserc
 .firebase/
 **/google-services.json
